@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block title %}Dashboard - AutoMfg Pro{% endblock %}
+
+{% block content %}
+<h1 style="margin-bottom: 1.5rem; color: #1a1a2e;">Manufacturing Dashboard</h1>
+
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="icon">🚗</div>
+        <div class="number">{{ vehicle_count }}</div>
+        <div class="label">Total Vehicles</div>
+    </div>
+    <div class="stat-card">
+        <div class="icon">✅</div>
+        <div class="number">{{ completed_count }}</div>
+        <div class="label">Completed</div>
+    </div>
+    <div class="stat-card">
+        <div class="icon">🏭</div>
+        <div class="number">{{ active_lines }}</div>
+        <div class="label">Active Production Lines</div>
+    </div>
+    <div class="stat-card">
+        <div class="icon">⚠️</div>
+        <div class="number">{{ low_stock }}</div>
+        <div class="label">Low Stock Alerts</div>
+    </div>
+</div>
+
+<div class="card">
+    <h2>Quick Actions</h2>
+    <div class="actions">
+        <a href="/vehicles/add" class="btn btn-primary">➕ Add New Vehicle</a>
+        <a href="/production" class="btn btn-success">🏭 View Production Lines</a>
+        <a href="/inventory" class="btn btn-secondary">📦 Check Inventory</a>
+        <a href="/quality" class="btn btn-primary">🔍 Quality Control</a>
+    </div>
+</div>
+
+<div class="card">
+    <h2>Manufacturing Process Overview</h2>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin-top: 1rem;">
+        <div style="padding: 1rem; background: #f8f9fa; border-radius: 8px; border-left: 4px solid #e94560;">
+            <h3 style="font-size: 1rem; margin-bottom: 0.5rem;">1. Stamping</h3>
+            <p style="font-size: 0.85rem; color: #666;">Metal sheets are stamped into body parts using heavy presses.</p>
+        </div>
+        <div style="padding: 1rem; background: #f8f9fa; border-radius: 8px; border-left: 4px solid #ffc107;">
+            <h3 style="font-size: 1rem; margin-bottom: 0.5rem;">2. Welding</h3>
+            <p style="font-size: 0.85rem; color: #666;">Stamped parts are welded together to form the vehicle body.</p>
+        </div>
+        <div style="padding: 1rem; background: #f8f9fa; border-radius: 8px; border-left: 4px solid #28a745;">
+            <h3 style="font-size: 1rem; margin-bottom: 0.5rem;">3. Painting</h3>
+            <p style="font-size: 0.85rem; color: #666;">Vehicle body goes through primer, base coat, and clear coat.</p>
+        </div>
+        <div style="padding: 1rem; background: #f8f9fa; border-radius: 8px; border-left: 4px solid #17a2b8;">
+            <h3 style="font-size: 1rem; margin-bottom: 0.5rem;">4. Assembly</h3>
+            <p style="font-size: 0.85rem; color: #666;">Engine, interior, electronics, and final assembly.</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+{% block title %}Quality Control - AutoMfg Pro{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+    <h1 style="color: #1a1a2e;">Quality Control</h1>
+</div>
+
+<div class="card">
+    <h2>Record New Quality Check</h2>
+    <form method="POST" action="/quality/add" style="display: flex; gap: 1rem; flex-wrap: wrap; align-items: flex-end;">
+        <div class="form-group" style="flex: 1; min-width: 120px;">
+            <label>Vehicle ID</label>
+            <select name="vehicle_id" required>
+                <option value="">-- Select --</option>
+                {% for v in vehicles %}
+                <option value="{{ v.id }}">{{ v.vehicle_name }} (ID: {{ v.id }})</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group" style="flex: 1; min-width: 150px;">
+            <label>Inspector Name</label>
+            <input type="text" name="inspector_name" required placeholder="Inspector Name">
+        </div>
+        <div class="form-group" style="flex: 0.8; min-width: 130px;">
+            <label>Check Date</label>
+            <input type="date" name="check_date" required>
+        </div>
+        <div class="form-group" style="flex: 0.8; min-width: 130px;">
+            <label>Status</label>
+            <select name="status" required>
+                <option value="Passed">Passed</option>
+                <option value="Failed">Failed</option>
+                <option value="Pending">Pending</option>
+                <option value="Rework">Rework Required</option>
+            </select>
+        </div>
+        <div class="form-group" style="flex: 1; min-width: 150px;">
+            <label>Defects Found (if any)</label>
+            <textarea name="defects_found" rows="1" placeholder="Describe defects or N/A"></textarea>
+        </div>
+        <div class="form-group" style="flex: 0.5; min-width: 80px;">
+            <label><input type="checkbox" name="passed" checked> Passed</label>
+        </div>
+        <div class="form-group" style="flex: 1; min-width: 150px;">
+            <label>Comments</label>
+            <textarea name="comments" rows="1" placeholder="Additional notes"></textarea>
+        </div>
+        <button type="submit" class="btn btn-success" style="margin-bottom: 1rem;">Record Check</button>
+    </form>
+</div>
+
+<div class="card">
+    <h2>Quality Records</h2>
+    {% if quality_records %}
+    <table>
+        <thead>
+            <tr>
+                <th>Vehicle</th>
+                <th>Inspector</th>
+                <th>Date</th>
+                <th>Status</th>
+                <th>Defects</th>
+                <th>Result</th>
+                <th>Comments</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for qc in quality_records %}
+            <tr>
+                <td><strong>{{ qc.vehicle_name or 'N/A' }}</strong></td>
+                <td>{{ qc.inspector_name }}</td>
+                <td>{{ qc.check_date }}</td>
+                <td>
+                    {% if qc.status == 'Passed' %}
+                        <span class="badge badge-success">{{ qc.status }}</span>
+                    {% elif qc.status == 'Failed' %}
+                        <span class="badge badge-danger">{{ qc.status }}</span>
+                    {% elif qc.status == 'Pending' %}
+                        <span class="badge badge-warning">{{ qc.status }}</span>
+                    {% else %}
+                        <span class="badge badge-info">{{ qc.status }}</span>
+                    {% endif %}
+                </td>
+                <td>{{ qc.defects_found or 'None' }}</td>
+                <td>{% if qc.passed %}✅ Pass{% else %}❌ Fail{% endif %}</td>
+                <td>{{ qc.comments or '-' }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p style="color: #666; padding: 1rem;">No quality records found.</p>
+    {% endif %}
+</div>
+{% endblock %}

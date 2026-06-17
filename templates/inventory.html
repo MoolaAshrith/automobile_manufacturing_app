@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% block title %}Inventory - AutoMfg Pro{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+    <h1 style="color: #1a1a2e;">Inventory Management</h1>
+</div>
+
+<div class="card">
+    <h2>Add New Part</h2>
+    <form method="POST" action="/inventory/add" style="display: flex; gap: 1rem; flex-wrap: wrap; align-items: flex-end;">
+        <div class="form-group" style="flex: 1; min-width: 150px;">
+            <label>Part Name</label>
+            <input type="text" name="part_name" required placeholder="e.g., Brake Pad">
+        </div>
+        <div class="form-group" style="flex: 1; min-width: 120px;">
+            <label>Part Number</label>
+            <input type="text" name="part_number" required placeholder="e.g., BP-001">
+        </div>
+        <div class="form-group" style="flex: 0.5; min-width: 80px;">
+            <label>Quantity</label>
+            <input type="number" name="quantity" required value="0" min="0">
+        </div>
+        <div class="form-group" style="flex: 0.5; min-width: 80px;">
+            <label>Min Threshold</label>
+            <input type="number" name="min_threshold" required value="10" min="1">
+        </div>
+        <div class="form-group" style="flex: 1; min-width: 150px;">
+            <label>Supplier</label>
+            <input type="text" name="supplier" placeholder="Supplier Name">
+        </div>
+        <button type="submit" class="btn btn-success" style="margin-bottom: 1rem;">Add Part</button>
+    </form>
+</div>
+
+<div class="card">
+    <h2>Current Stock</h2>
+    {% if inventory %}
+    <table>
+        <thead>
+            <tr>
+                <th>Part Name</th>
+                <th>Part Number</th>
+                <th>Quantity</th>
+                <th>Min Threshold</th>
+                <th>Supplier</th>
+                <th>Last Updated</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in inventory %}
+            <tr>
+                <td><strong>{{ item.part_name }}</strong></td>
+                <td>{{ item.part_number }}</td>
+                <td>
+                    {% if item.quantity < item.min_threshold %}
+                        <span class="badge badge-danger">{{ item.quantity }} (LOW!)</span>
+                    {% else %}
+                        <span class="badge badge-success">{{ item.quantity }}</span>
+                    {% endif %}
+                </td>
+                <td>{{ item.min_threshold }}</td>
+                <td>{{ item.supplier or '-' }}</td>
+                <td>{{ item.last_updated }}</td>
+                <td>
+                    <form method="POST" action="/inventory/update/{{ item.id }}" style="display:inline; display:flex; gap:0.3rem;">
+                        <input type="number" name="quantity" value="{{ item.quantity }}" style="width:70px; padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px;">
+                        <button type="submit" class="btn btn-primary btn-sm">Update</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p style="color: #666; padding: 1rem;">No inventory items. Add parts above!</p>
+    {% endif %}
+</div>
+{% endblock %}

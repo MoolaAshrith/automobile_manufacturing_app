@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}Add Vehicle - AutoMfg Pro{% endblock %}
+
+{% block content %}
+<div class="card" style="max-width: 600px; margin: 0 auto;">
+    <h2>Add New Vehicle</h2>
+    <form method="POST">
+        <div class="form-group">
+            <label for="vehicle_name">Vehicle Name / Model</label>
+            <input type="text" id="vehicle_name" name="vehicle_name" required placeholder="e.g., Sedan X100, SUV ProMax">
+        </div>
+        <div class="form-group">
+            <label for="vehicle_type">Vehicle Type</label>
+            <select id="vehicle_type" name="vehicle_type" required>
+                <option value="">-- Select Type --</option>
+                <option value="Sedan">Sedan</option>
+                <option value="SUV">SUV</option>
+                <option value="Hatchback">Hatchback</option>
+                <option value="Truck">Truck</option>
+                <option value="Electric">Electric</option>
+                <option value="Hybrid">Hybrid</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="manufacturing_date">Manufacturing Date</label>
+            <input type="date" id="manufacturing_date" name="manufacturing_date" required>
+        </div>
+        <div class="form-group">
+            <label for="engine_capacity">Engine Capacity</label>
+            <input type="text" id="engine_capacity" name="engine_capacity" placeholder="e.g., 1.5L Turbo, 2.0L V6, Electric 150kW">
+        </div>
+        <div class="form-group">
+            <label for="color">Color</label>
+            <input type="text" id="color" name="color" placeholder="e.g., Pearl White, Midnight Black">
+        </div>
+        <div class="form-group">
+            <label for="status">Status</label>
+            <select id="status" name="status">
+                <option value="In Production">In Production</option>
+                <option value="Quality Check">Quality Check</option>
+                <option value="Completed">Completed</option>
+                <option value="On Hold">On Hold</option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Add Vehicle</button>
+        <a href="/vehicles" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+{% endblock %}

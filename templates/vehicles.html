@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block title %}Vehicles - AutoMfg Pro{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+    <h1 style="color: #1a1a2e;">Vehicle Management</h1>
+    <a href="/vehicles/add" class="btn btn-primary">➕ Add New Vehicle</a>
+</div>
+
+<div class="card">
+    <h2>Vehicle Registry</h2>
+    {% if vehicles %}
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Vehicle Name</th>
+                <th>Type</th>
+                <th>Mfg. Date</th>
+                <th>Engine</th>
+                <th>Color</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for v in vehicles %}
+            <tr>
+                <td>{{ v.id }}</td>
+                <td><strong>{{ v.vehicle_name }}</strong></td>
+                <td>{{ v.vehicle_type }}</td>
+                <td>{{ v.manufacturing_date }}</td>
+                <td>{{ v.engine_capacity }}</td>
+                <td>{{ v.color }}</td>
+                <td>
+                    {% if v.status == 'Completed' %}
+                        <span class="badge badge-success">{{ v.status }}</span>
+                    {% elif v.status == 'In Production' %}
+                        <span class="badge badge-warning">{{ v.status }}</span>
+                    {% elif v.status == 'Quality Check' %}
+                        <span class="badge badge-info">{{ v.status }}</span>
+                    {% else %}
+                        <span class="badge badge-danger">{{ v.status }}</span>
+                    {% endif %}
+                </td>
+                <td>
+                    <form method="POST" action="/vehicles/update/{{ v.id }}" style="display:inline;">
+                        <select name="status" style="padding: 0.3rem; border-radius: 4px; border: 1px solid #ddd;">
+                            <option value="In Production" {% if v.status == 'In Production' %}selected{% endif %}>In Production</option>
+                            <option value="Quality Check" {% if v.status == 'Quality Check' %}selected{% endif %}>Quality Check</option>
+                            <option value="Completed" {% if v.status == 'Completed' %}selected{% endif %}>Completed</option>
+                            <option value="On Hold" {% if v.status == 'On Hold' %}selected{% endif %}>On Hold</option>
+                        </select>
+                        <button type="submit" class="btn btn-success btn-sm">Update</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p style="color: #666; padding: 1rem;">No vehicles found. Add your first vehicle to get started!</p>
+    {% endif %}
+</div>
+{% endblock %}

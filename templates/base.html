@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}AutoMfg Pro{% endblock %}</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f0f2f5; color: #333; }
+        
+        /* Navigation */
+        .navbar {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            padding: 0 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 60px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+        .navbar .logo { color: #e94560; font-size: 1.5rem; font-weight: 700; text-decoration: none; }
+        .navbar .logo span { color: #fff; }
+        .nav-links { display: flex; gap: 0; }
+        .nav-links a {
+            color: #ccc; text-decoration: none; padding: 1rem 1.2rem;
+            transition: all 0.3s; font-size: 0.9rem; font-weight: 500;
+        }
+        .nav-links a:hover, .nav-links a.active { color: #fff; background: rgba(233,69,96,0.2); }
+        
+        /* Main content */
+        .container { max-width: 1200px; margin: 2rem auto; padding: 0 1rem; }
+        
+        /* Flash messages */
+        .flash { padding: 1rem; margin-bottom: 1rem; border-radius: 8px; font-weight: 500; }
+        .flash.success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .flash.error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        
+        /* Cards */
+        .card {
+            background: #fff; border-radius: 12px; padding: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08); margin-bottom: 1.5rem;
+        }
+        .card h2 { color: #1a1a2e; margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 2px solid #e94560; }
+        
+        /* Dashboard stats */
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem; margin-bottom: 2rem; }
+        .stat-card {
+            background: #fff; border-radius: 12px; padding: 1.5rem; text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1); transition: transform 0.3s;
+        }
+        .stat-card:hover { transform: translateY(-5px); }
+        .stat-card .number { font-size: 2.5rem; font-weight: 700; color: #e94560; }
+        .stat-card .label { color: #666; margin-top: 0.5rem; font-size: 0.9rem; }
+        .stat-card .icon { font-size: 2rem; margin-bottom: 0.5rem; }
+        
+        /* Tables */
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 0.75rem 1rem; text-align: left; border-bottom: 1px solid #eee; }
+        th { background: #1a1a2e; color: #fff; font-weight: 600; }
+        tr:hover { background: #f8f9fa; }
+        
+        /* Badges */
+        .badge {
+            padding: 0.3rem 0.8rem; border-radius: 20px; font-size: 0.8rem; font-weight: 600;
+        }
+        .badge-success { background: #28a745; color: #fff; }
+        .badge-warning { background: #ffc107; color: #333; }
+        .badge-danger { background: #dc3545; color: #fff; }
+        .badge-info { background: #17a2b8; color: #fff; }
+        
+        /* Forms */
+        .form-group { margin-bottom: 1rem; }
+        .form-group label { display: block; margin-bottom: 0.3rem; font-weight: 600; color: #555; }
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%; padding: 0.6rem; border: 1px solid #ddd; border-radius: 6px; font-size: 1rem;
+        }
+        .form-group input:focus, .form-group select:focus { outline: none; border-color: #e94560; box-shadow: 0 0 5px rgba(233,69,96,0.3); }
+        
+        /* Buttons */
+        .btn {
+            padding: 0.6rem 1.2rem; border: none; border-radius: 6px; cursor: pointer;
+            font-size: 0.9rem; font-weight: 600; text-decoration: none; display: inline-block; transition: all 0.3s;
+        }
+        .btn-primary { background: #e94560; color: #fff; }
+        .btn-primary:hover { background: #c73e54; }
+        .btn-success { background: #28a745; color: #fff; }
+        .btn-success:hover { background: #218838; }
+        .btn-secondary { background: #6c757d; color: #fff; }
+        .btn-secondary:hover { background: #5a6268; }
+        .btn-sm { padding: 0.3rem 0.8rem; font-size: 0.8rem; }
+        
+        /* Actions */
+        .actions { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1rem; }
+        
+        /* Footer */
+        .footer { text-align: center; padding: 1.5rem; color: #666; font-size: 0.85rem; margin-top: 2rem; }
+    </style>
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <nav class="navbar">
+        <a href="/" class="logo">Auto<span>Mfg</span> Pro</a>
+        <div class="nav-links">
+            <a href="/" class="{{ 'active' if request.path == '/' else '' }}">Dashboard</a>
+            <a href="/vehicles" class="{{ 'active' if '/vehicle' in request.path else '' }}">Vehicles</a>
+            <a href="/production" class="{{ 'active' if '/production' in request.path else '' }}">Production</a>
+            <a href="/inventory" class="{{ 'active' if '/inventory' in request.path else '' }}">Inventory</a>
+            <a href="/quality" class="{{ 'active' if '/quality' in request.path else '' }}">Quality</a>
+        </div>
+    </nav>
+    
+    <div class="container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="flash {{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        
+        {% block content %}{% endblock %}
+    </div>
+    
+    <div class="footer">
+        <p>Automobile Manufacturing Management System &copy; 2026 | 2-Tier AWS Architecture | DevOps Project</p>
+    </div>
+    
+    {% block extra_js %}{% endblock %}
+</body>
+</html>
